@@ -10,16 +10,15 @@ import Foundation
 
 class SetGameInteractor {
     
-    
     private var currentState: GameState {
         didSet {
             delegate?.onUpdated(withGameState: currentState)
         }
     }
     
-    weak var delegate: OnGameStateUpdatedDelegate! {
+    weak var delegate: OnGameStateUpdatedDelegate? {
         didSet {
-            
+            delegate?.onUpdated(withGameState: currentState)
         }
     }
     
@@ -33,12 +32,14 @@ class SetGameInteractor {
     
     init() {
         cardStack.resetStack()
-        currentState = GameState.IncompleteSelection(Playboard(), ScoreCounter())
+        let playboard = Playboard().fillWith(newItems: cardStack.nextCards(count: SetGameInteractor.INITIAL_SET_GAME_CARD_COUNT))
+        currentState = GameState.IncompleteSelection(playboard, ScoreCounter())
     }
     
     func reset() {
         cardStack.resetStack()
-        currentState = GameState.IncompleteSelection(Playboard(), ScoreCounter())
+        let playboard = Playboard().fillWith(newItems: cardStack.nextCards(count: SetGameInteractor.INITIAL_SET_GAME_CARD_COUNT))
+        currentState = GameState.IncompleteSelection(playboard, ScoreCounter())
     }
     
     func addMoreCards() {
@@ -47,9 +48,9 @@ class SetGameInteractor {
         case .IncompleteSelection(let playboard, let scoreCounter):
             currentState = .IncompleteSelection(playboard.fillWith(newItems: newCards), scoreCounter)
         case .SuccessSelection(let playboard, let scoreCounter):
-            currentState = .SuccessSelection(playboard.fillWith(newItems: newCards), scoreCounter)
+            currentState = .IncompleteSelection(playboard.fillWith(newItems: newCards).resetSelection(afterSuccess: true), scoreCounter)
         case .FailureSelection(let playboard, let scoreCounter):
-            currentState = .IncompleteSelection(playboard.fillWith(newItems: newCards), scoreCounter)
+            currentState = .IncompleteSelection(playboard.fillWith(newItems: newCards).resetSelection(), scoreCounter)
         }
     }
     
@@ -62,16 +63,18 @@ class SetGameInteractor {
             if !selectedCards.contains(card) {
                 currentState = .IncompleteSelection(newPlayboard, scoreCounter.onDeselect())
                 break
-            }
-            if correctnessVerifier.isCardsSelectionCorrect(cards: selectedCards) {
+            } else if selectedCards.count < 3 {
+                currentState = .IncompleteSelection(newPlayboard, scoreCounter)
+                break
+            } else if correctnessVerifier.isCardsSelectionCorrect(cards: selectedCards) {
                 currentState = .SuccessSelection(newPlayboard, scoreCounter.onSetCorrect())
             } else {
                 currentState = .FailureSelection(newPlayboard, scoreCounter.onSetIncorrect())
             }
         case .SuccessSelection(let playboard, let scoreCounter):
-            currentState = .IncompleteSelection(playboard.resetSelection(afterSuccess: true), scoreCounter)
+            currentState = .IncompleteSelection(playboard.resetSelection(afterSuccess: true).select(card: card), scoreCounter)
         case .FailureSelection(let playboard, let scoreCounter):
-            currentState = .IncompleteSelection(playboard.resetSelection(), scoreCounter)
+            currentState = .IncompleteSelection(playboard.resetSelection().select(card: card), scoreCounter)
         }
     }
     
