@@ -12,6 +12,14 @@
 		F4C120B121E2288F00BAED5E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4C120AF21E2288F00BAED5E /* Main.storyboard */; };
 		F4C120B321E2289000BAED5E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4C120B221E2289000BAED5E /* Assets.xcassets */; };
 		F4C120B621E2289000BAED5E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4C120B421E2289000BAED5E /* LaunchScreen.storyboard */; };
+		F4C120C021E237AD00BAED5E /* ScoreCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C120BF21E237AD00BAED5E /* ScoreCounter.swift */; };
+		F4C120C221E238F300BAED5E /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C120C121E238F300BAED5E /* Card.swift */; };
+		F4C120C421E23AF800BAED5E /* SetGameInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C120C321E23AF800BAED5E /* SetGameInteractor.swift */; };
+		F4C120C621E269B700BAED5E /* CardStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C120C521E269B700BAED5E /* CardStack.swift */; };
+		F4C120CA21E2981000BAED5E /* SetCorrectnessVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C120C921E2981000BAED5E /* SetCorrectnessVerifier.swift */; };
+		F4C120CC21E29D0D00BAED5E /* Playboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C120CB21E29D0D00BAED5E /* Playboard.swift */; };
+		F4C120CE21E3BE6900BAED5E /* SetGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C120CD21E3BE6900BAED5E /* SetGameView.swift */; };
+		F4C120D021E3CFF000BAED5E /* OnGameStateUpdatedDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C120CF21E3CFF000BAED5E /* OnGameStateUpdatedDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +30,14 @@
 		F4C120B221E2289000BAED5E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F4C120B521E2289000BAED5E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F4C120B721E2289000BAED5E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F4C120BF21E237AD00BAED5E /* ScoreCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreCounter.swift; sourceTree = "<group>"; };
+		F4C120C121E238F300BAED5E /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		F4C120C321E23AF800BAED5E /* SetGameInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGameInteractor.swift; sourceTree = "<group>"; };
+		F4C120C521E269B700BAED5E /* CardStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStack.swift; sourceTree = "<group>"; };
+		F4C120C921E2981000BAED5E /* SetCorrectnessVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCorrectnessVerifier.swift; sourceTree = "<group>"; };
+		F4C120CB21E29D0D00BAED5E /* Playboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playboard.swift; sourceTree = "<group>"; };
+		F4C120CD21E3BE6900BAED5E /* SetGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGameView.swift; sourceTree = "<group>"; };
+		F4C120CF21E3CFF000BAED5E /* OnGameStateUpdatedDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnGameStateUpdatedDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,10 +72,18 @@
 			children = (
 				F4C120AB21E2288F00BAED5E /* AppDelegate.swift */,
 				F4C120AD21E2288F00BAED5E /* ViewController.swift */,
+				F4C120CF21E3CFF000BAED5E /* OnGameStateUpdatedDelegate.swift */,
 				F4C120AF21E2288F00BAED5E /* Main.storyboard */,
 				F4C120B221E2289000BAED5E /* Assets.xcassets */,
 				F4C120B421E2289000BAED5E /* LaunchScreen.storyboard */,
 				F4C120B721E2289000BAED5E /* Info.plist */,
+				F4C120BF21E237AD00BAED5E /* ScoreCounter.swift */,
+				F4C120C921E2981000BAED5E /* SetCorrectnessVerifier.swift */,
+				F4C120C121E238F300BAED5E /* Card.swift */,
+				F4C120C321E23AF800BAED5E /* SetGameInteractor.swift */,
+				F4C120C521E269B700BAED5E /* CardStack.swift */,
+				F4C120CB21E29D0D00BAED5E /* Playboard.swift */,
+				F4C120CD21E3BE6900BAED5E /* SetGameView.swift */,
 			);
 			path = SetGame;
 			sourceTree = "<group>";
@@ -135,8 +159,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4C120C021E237AD00BAED5E /* ScoreCounter.swift in Sources */,
+				F4C120C221E238F300BAED5E /* Card.swift in Sources */,
+				F4C120D021E3CFF000BAED5E /* OnGameStateUpdatedDelegate.swift in Sources */,
 				F4C120AE21E2288F00BAED5E /* ViewController.swift in Sources */,
+				F4C120C421E23AF800BAED5E /* SetGameInteractor.swift in Sources */,
 				F4C120AC21E2288F00BAED5E /* AppDelegate.swift in Sources */,
+				F4C120C621E269B700BAED5E /* CardStack.swift in Sources */,
+				F4C120CC21E29D0D00BAED5E /* Playboard.swift in Sources */,
+				F4C120CA21E2981000BAED5E /* SetCorrectnessVerifier.swift in Sources */,
+				F4C120CE21E3BE6900BAED5E /* SetGameView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
