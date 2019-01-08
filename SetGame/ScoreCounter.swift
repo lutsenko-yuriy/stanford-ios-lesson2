@@ -8,21 +8,21 @@
 
 import Foundation
 
-struct ScoreCounter {
+class ScoreCounter {
     
     private(set) var score = 0
     
-    mutating func onSetCorrect() -> ScoreCounter {
+    func onSetCorrect() -> ScoreCounter {
         score += 3
         return self
     }
     
-    mutating func onSetIncorrect() -> ScoreCounter {
+    func onSetIncorrect() -> ScoreCounter {
         score -= 5
         return self
     }
     
-    mutating func onDeselect() -> ScoreCounter {
+    func onDeselect() -> ScoreCounter {
         score -= 1
         return self
     }

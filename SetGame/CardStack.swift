@@ -37,4 +37,7 @@ class CardStack {
         return nextCards
     }
 
+    var isEmpty: Bool {
+        return stackTop >= cardStack.count
+    }
 }

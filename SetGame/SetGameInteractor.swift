@@ -22,65 +22,128 @@ class SetGameInteractor {
         }
     }
     
-    private static let INITIAL_SET_GAME_CARD_COUNT = 12
-    private static let ADDITIONAL_SET_GAME_CARD_COUNT = 3
+    private let fullSetGameCardCount: Int
+    private let initialSetGameCardCount: Int
+    private let additionalSetGameCardCount = 3
     
     private let correctnessVerifier =
         SetCorrectnessVerifier()
     
     private var cardStack = CardStack()
     
-    init() {
+    private var playboard: Playboard
+    private var scoreCounter: ScoreCounter
+    
+    private var cardsAvailableForLoading: Bool {
+        return !(playboard.isFull || cardStack.isEmpty)
+    }
+    
+    init(withCountOfCards countOfCards: Int) {
+        self.fullSetGameCardCount = countOfCards
+        self.initialSetGameCardCount = fullSetGameCardCount / 2
+        
         cardStack.resetStack()
-        let playboard = Playboard().fillWith(newItems: cardStack.nextCards(count: SetGameInteractor.INITIAL_SET_GAME_CARD_COUNT))
-        currentState = GameState.IncompleteSelection(playboard, ScoreCounter())
+        playboard = Playboard(withCountOfCards: fullSetGameCardCount).fillWith(newItems: cardStack.nextCards(count: initialSetGameCardCount))
+        scoreCounter = ScoreCounter()
+        currentState = GameState(
+            cards: playboard.cards,
+            score: scoreCounter.score,
+            cardsAvailableForLoading: true,
+            selectionState: .IncompleteSelection
+        )
     }
     
     func reset() {
         cardStack.resetStack()
-        let playboard = Playboard().fillWith(newItems: cardStack.nextCards(count: SetGameInteractor.INITIAL_SET_GAME_CARD_COUNT))
-        currentState = GameState.IncompleteSelection(playboard, ScoreCounter())
+        playboard = Playboard(withCountOfCards: fullSetGameCardCount).fillWith(newItems: cardStack.nextCards(count: initialSetGameCardCount))
+        scoreCounter = ScoreCounter()
+        currentState = GameState(
+            cards: playboard.cards,
+            score: scoreCounter.score,
+            cardsAvailableForLoading: self.cardsAvailableForLoading,
+            selectionState: .IncompleteSelection
+        )
     }
     
     func addMoreCards() {
-        let newCards = cardStack.nextCards(count: SetGameInteractor.ADDITIONAL_SET_GAME_CARD_COUNT)
-        switch currentState {
-        case .IncompleteSelection(let playboard, let scoreCounter):
-            currentState = .IncompleteSelection(playboard.fillWith(newItems: newCards), scoreCounter)
-        case .SuccessSelection(let playboard, let scoreCounter):
-            currentState = .IncompleteSelection(playboard.fillWith(newItems: newCards).resetSuccessSelection(), scoreCounter)
-        case .FailureSelection(let playboard, let scoreCounter):
-            currentState = .IncompleteSelection(playboard.fillWith(newItems: newCards).resetFailureSelection(), scoreCounter)
+        let newCards = cardStack.nextCards(count: additionalSetGameCardCount)
+        playboard = playboard.fillWith(newItems: newCards)
+        let scores = scoreCounter.score
+        switch currentState.selectionState {
+        case .IncompleteSelection:
+            currentState = GameState(
+                cards: playboard.cards,
+                score: scores,
+                cardsAvailableForLoading: self.cardsAvailableForLoading,
+                selectionState: .IncompleteSelection
+            )
+        case .SuccessSelection:
+            currentState = GameState(
+                cards: playboard.resetSuccessSelection().cards,
+                score: scores,
+                cardsAvailableForLoading: self.cardsAvailableForLoading,
+                selectionState: .SuccessSelection
+            )
+        case .FailureSelection:
+            currentState = GameState(
+                cards: playboard.resetSelection().cards,
+                score: scores,
+                cardsAvailableForLoading: self.cardsAvailableForLoading,
+                selectionState: .SuccessSelection
+            )
         }
     }
     
     func select(card: Card) {
-        switch currentState {
-        case .IncompleteSelection(let playboard, var scoreCounter):
-            let newPlayboard = playboard.select(card: card)
-            let selectedCards = newPlayboard.selectedCards
+        switch currentState.selectionState {
+        case .IncompleteSelection:
+            playboard = playboard.select(card: card)
+            let selectedCards = playboard.selectedCards
             // The card was deselected therefore there cannot be card
             if !selectedCards.contains(card) {
-                currentState = .IncompleteSelection(newPlayboard, scoreCounter.onDeselect())
-                break
+                currentState = GameState(
+                    cards: playboard.cards,
+                    score: scoreCounter.onDeselect().score,
+                    cardsAvailableForLoading: self.cardsAvailableForLoading,
+                    selectionState: .IncompleteSelection
+                )
             } else if selectedCards.count < 3 {
-                currentState = .IncompleteSelection(newPlayboard, scoreCounter)
-                break
+                currentState = GameState(
+                    cards: playboard.cards,
+                    score: scoreCounter.score,
+                    cardsAvailableForLoading: self.cardsAvailableForLoading,
+                    selectionState: .IncompleteSelection
+                )
             } else if correctnessVerifier.isCardsSelectionCorrect(cards: selectedCards) {
-                currentState = .IncompleteSelection(newPlayboard.resetSuccessSelection(), scoreCounter.onSetCorrect())
+                currentState = GameState(
+                    cards: playboard.resetSuccessSelection().cards,
+                    score: scoreCounter.onSetCorrect().score,
+                    cardsAvailableForLoading: self.cardsAvailableForLoading,
+                    selectionState: .IncompleteSelection
+                )
             } else {
-                currentState = .FailureSelection(newPlayboard, scoreCounter.onSetIncorrect())
+                currentState = GameState(
+                    cards: playboard.cards,
+                    score: scoreCounter.onSetIncorrect().score,
+                    cardsAvailableForLoading: self.cardsAvailableForLoading,
+                    selectionState: .FailureSelection
+                )
             }
-        case .SuccessSelection(let playboard, let scoreCounter):
-            currentState = .IncompleteSelection(playboard.resetSuccessSelection().select(card: card), scoreCounter)
-        case .FailureSelection(let playboard, let scoreCounter):
-            currentState = .IncompleteSelection(playboard.resetFailureSelection().select(card: card), scoreCounter)
+        case .SuccessSelection:
+            currentState = GameState(
+                cards: playboard.resetSuccessSelection().select(card: card).cards,
+                score: scoreCounter.score,
+                cardsAvailableForLoading: self.cardsAvailableForLoading,
+                selectionState: .IncompleteSelection
+            )
+        case .FailureSelection:
+            currentState = GameState(
+                cards: playboard.resetSelection().select(card: card).cards,
+                score: scoreCounter.score,
+                cardsAvailableForLoading: self.cardsAvailableForLoading,
+                selectionState: .IncompleteSelection
+            )
         }
     }
     
-    enum GameState {
-        case IncompleteSelection(Playboard, ScoreCounter)
-        case SuccessSelection(Playboard, ScoreCounter)
-        case FailureSelection(Playboard, ScoreCounter)
-    }
 }

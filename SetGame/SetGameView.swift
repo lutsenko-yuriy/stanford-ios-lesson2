@@ -10,6 +10,6 @@ import Foundation
 
 protocol SetGameView {
     
-    func displayGameState(gameState: SetGameInteractor.GameState)
+    func displayGameState(gameState: GameState)
     
 }

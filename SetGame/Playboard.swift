@@ -10,6 +10,10 @@ import Foundation
 
 class Playboard {
     
+    init(withCountOfCards countOfCards: Int) {
+        cards = [CardState?](repeating: nil, count: countOfCards)
+    }
+    
     var selectedCards: [Card] {
         return cards.filter { $0?.isSelected == true }
             .map { $0!.card }
@@ -24,7 +28,7 @@ class Playboard {
     }
     
     // Because I'm too lazy to add new items and stuff
-    private(set) var cards = [CardState?](repeating: nil, count: 24)
+    private(set) var cards: [CardState?]
     
     func reset() {
         cards = [CardState?](repeating: nil, count: 24)
@@ -60,7 +64,7 @@ class Playboard {
         return self
     }
     
-    func resetFailureSelection() -> Playboard {
+    func resetSelection() -> Playboard {
         cards = cards.map {
             if let cardState = $0 {
                 return CardState(card: cardState.card, isSelected: false)

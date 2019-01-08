@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController, OnGameStateUpdatedDelegate {
     
-    let model = SetGameInteractor()
+    lazy var model = SetGameInteractor(withCountOfCards: cardsButtons.count)
     
     @IBOutlet weak var scoresLabel: UILabel!
     @IBOutlet weak var newGameButton: UIButton!
@@ -33,30 +33,30 @@ class ViewController: UIViewController, OnGameStateUpdatedDelegate {
         }
     }
     
-    func onUpdated(withGameState gameState: SetGameInteractor.GameState) {
-        switch gameState {
-        case .FailureSelection(let playboard, let scoreCount):
-            showState(withPlayboard: playboard, scored: scoreCount.score, circleSelectedInColor: #colorLiteral(red: 1, green: 0, blue: 0.03492087608, alpha: 1))
-        case .IncompleteSelection(let playboard, let scoreCount):
-            showState(withPlayboard: playboard, scored: scoreCount.score, circleSelectedInColor: #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1))
-        case .SuccessSelection(let playboard, let scoreCount):
-            showState(withPlayboard: playboard, scored: scoreCount.score, circleSelectedInColor: #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1))
+    func onUpdated(withGameState gameState: GameState) {
+        cardsArray = gameState.cards
+        displayScores(gameState.score)
+        
+        newGameButton.isEnabled = gameState.cardsAvailableForLoading
+        
+        switch gameState.selectionState {
+        case .FailureSelection:
+            showState(circleSelectedInColor: #colorLiteral(red: 1, green: 0, blue: 0.03492087608, alpha: 1))
+        case .IncompleteSelection:
+            showState(circleSelectedInColor: #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1))
+        case .SuccessSelection:
+            showState(circleSelectedInColor: #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1))
         }
     }
     
-    private func showState(withPlayboard playboard: Playboard, scored score: Int, circleSelectedInColor color: UIColor) {
-        cardsArray = playboard.cards
-        displayScores(score)
-        
-        newGameButton.isEnabled = !playboard.isFull
-        
+    private func showState(circleSelectedInColor color: UIColor) {
         for i in cardsArray.indices {
             if let cardState = cardsArray[i] {
                 cardsButtons[i].setAttributedTitle(buildText(for: cardState.card), for: UIControl.State.normal)
                 cardsButtons[i].backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
                 if cardState.isSelected {
                     cardsButtons[i].layer.borderColor = color.cgColor
-                    cardsButtons[i].layer.borderWidth = 2.5
+                    cardsButtons[i].layer.borderWidth = 3.0
                 } else {
                     cardsButtons[i].layer.borderColor = color.cgColor
                     cardsButtons[i].layer.borderWidth = 0
@@ -104,20 +104,20 @@ class ViewController: UIViewController, OnGameStateUpdatedDelegate {
     private func color(for value: Color) -> UIColor {
         switch value {
         case .color1:
-            return #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            return #colorLiteral(red: 0.721568644, green: 0.8862745166, blue: 0.5921568871, alpha: 1)
         case .color2:
-            return #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
+            return #colorLiteral(red: 0.9568627477, green: 0.6588235497, blue: 0.5450980663, alpha: 1)
         case .color3:
-            return #colorLiteral(red: 1, green: 0, blue: 0.03492087608, alpha: 1)
+            return #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1)
         }
     }
     
     private func shading(for value: Shading) -> CGFloat {
         switch value {
         case .shading1:
-            return CGFloat(0.333)
+            return CGFloat(0.3333)
         case .shading2:
-            return CGFloat(0.666)
+            return CGFloat(0.6667)
         case .shading3:
             return CGFloat(1.0)
         }

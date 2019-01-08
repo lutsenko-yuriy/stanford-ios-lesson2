@@ -9,5 +9,5 @@
 import Foundation
 
 protocol OnGameStateUpdatedDelegate : class {
-    func onUpdated(withGameState gameState: SetGameInteractor.GameState)
+    func onUpdated(withGameState gameState: GameState)
 }
