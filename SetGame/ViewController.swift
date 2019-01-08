@@ -36,22 +36,24 @@ class ViewController: UIViewController, OnGameStateUpdatedDelegate {
     func onUpdated(withGameState gameState: SetGameInteractor.GameState) {
         switch gameState {
         case .FailureSelection(let playboard, let scoreCount):
-            showState(withCards: playboard.cards, scored: scoreCount.score, circleSelectedInColor: #colorLiteral(red: 1, green: 0, blue: 0.03492087608, alpha: 1))
+            showState(withPlayboard: playboard, scored: scoreCount.score, circleSelectedInColor: #colorLiteral(red: 1, green: 0, blue: 0.03492087608, alpha: 1))
         case .IncompleteSelection(let playboard, let scoreCount):
-            showState(withCards: playboard.cards, scored: scoreCount.score, circleSelectedInColor: #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1))
+            showState(withPlayboard: playboard, scored: scoreCount.score, circleSelectedInColor: #colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1))
         case .SuccessSelection(let playboard, let scoreCount):
-            showState(withCards: playboard.cards, scored: scoreCount.score, circleSelectedInColor: #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1))
+            showState(withPlayboard: playboard, scored: scoreCount.score, circleSelectedInColor: #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1))
         }
     }
     
-    private func showState(withCards cards: [CardState?], scored score: Int, circleSelectedInColor color: UIColor) {
-        cardsArray = cards
+    private func showState(withPlayboard playboard: Playboard, scored score: Int, circleSelectedInColor color: UIColor) {
+        cardsArray = playboard.cards
         displayScores(score)
         
-        for i in cards.indices {
-            if let cardState = cards[i] {
+        newGameButton.isEnabled = !playboard.isFull
+        
+        for i in cardsArray.indices {
+            if let cardState = cardsArray[i] {
                 cardsButtons[i].setAttributedTitle(buildText(for: cardState.card), for: UIControl.State.normal)
-                cardsButtons[i].backgroundColor = #colorLiteral(red: 1, green: 0.5775219319, blue: 0, alpha: 1)
+                cardsButtons[i].backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
                 if cardState.isSelected {
                     cardsButtons[i].layer.borderColor = color.cgColor
                     cardsButtons[i].layer.borderWidth = 2.5
@@ -113,9 +115,9 @@ class ViewController: UIViewController, OnGameStateUpdatedDelegate {
     private func shading(for value: Shading) -> CGFloat {
         switch value {
         case .shading1:
-            return CGFloat(0.33)
+            return CGFloat(0.333)
         case .shading2:
-            return CGFloat(0.66)
+            return CGFloat(0.666)
         case .shading3:
             return CGFloat(1.0)
         }

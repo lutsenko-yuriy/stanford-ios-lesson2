@@ -48,9 +48,9 @@ class SetGameInteractor {
         case .IncompleteSelection(let playboard, let scoreCounter):
             currentState = .IncompleteSelection(playboard.fillWith(newItems: newCards), scoreCounter)
         case .SuccessSelection(let playboard, let scoreCounter):
-            currentState = .IncompleteSelection(playboard.fillWith(newItems: newCards).resetSelection(afterSuccess: true), scoreCounter)
+            currentState = .IncompleteSelection(playboard.fillWith(newItems: newCards).resetSuccessSelection(), scoreCounter)
         case .FailureSelection(let playboard, let scoreCounter):
-            currentState = .IncompleteSelection(playboard.fillWith(newItems: newCards).resetSelection(), scoreCounter)
+            currentState = .IncompleteSelection(playboard.fillWith(newItems: newCards).resetFailureSelection(), scoreCounter)
         }
     }
     
@@ -67,14 +67,14 @@ class SetGameInteractor {
                 currentState = .IncompleteSelection(newPlayboard, scoreCounter)
                 break
             } else if correctnessVerifier.isCardsSelectionCorrect(cards: selectedCards) {
-                currentState = .SuccessSelection(newPlayboard, scoreCounter.onSetCorrect())
+                currentState = .IncompleteSelection(newPlayboard.resetSuccessSelection(), scoreCounter.onSetCorrect())
             } else {
                 currentState = .FailureSelection(newPlayboard, scoreCounter.onSetIncorrect())
             }
         case .SuccessSelection(let playboard, let scoreCounter):
-            currentState = .IncompleteSelection(playboard.resetSelection(afterSuccess: true).select(card: card), scoreCounter)
+            currentState = .IncompleteSelection(playboard.resetSuccessSelection().select(card: card), scoreCounter)
         case .FailureSelection(let playboard, let scoreCounter):
-            currentState = .IncompleteSelection(playboard.resetSelection().select(card: card), scoreCounter)
+            currentState = .IncompleteSelection(playboard.resetFailureSelection().select(card: card), scoreCounter)
         }
     }
     

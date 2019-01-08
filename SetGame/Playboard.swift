@@ -49,9 +49,20 @@ class Playboard {
         return self
     }
     
-    func resetSelection(afterSuccess: Bool = false) -> Playboard {
+    func resetSuccessSelection() -> Playboard {
         cards = cards.map {
-            if let cardState = $0, !afterSuccess {
+            if let cardState = $0, !cardState.isSelected {
+                return CardState(card: cardState.card, isSelected: false)
+            } else {
+                return nil
+            }
+        }
+        return self
+    }
+    
+    func resetFailureSelection() -> Playboard {
+        cards = cards.map {
+            if let cardState = $0 {
                 return CardState(card: cardState.card, isSelected: false)
             } else {
                 return nil
