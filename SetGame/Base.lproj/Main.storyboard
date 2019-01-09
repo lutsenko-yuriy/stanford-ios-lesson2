@@ -14,14 +14,13 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SetGame" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QCW-Bx-9gM">
-                                <rect key="frame" x="16" y="44" width="129" height="30"/>
+                                <rect key="frame" x="16" y="44" width="382" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -262,7 +261,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="QCW-Bx-9gM" secondAttribute="trailing" constant="269" id="6gN-IB-Ixf"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="QCW-Bx-9gM" secondAttribute="trailing" constant="16" id="6gN-IB-Ixf"/>
                             <constraint firstItem="1iP-tW-Dki" firstAttribute="top" secondItem="QCW-Bx-9gM" secondAttribute="bottom" constant="8" symbolic="YES" id="9bu-aQ-Nrg"/>
                             <constraint firstItem="XEi-Bp-3ly" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="L3r-9l-LaF"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="1iP-tW-Dki" secondAttribute="trailing" constant="16" id="QO7-lW-swW"/>
@@ -306,6 +305,7 @@
                         <outletCollection property="cardsButtons" destination="azH-da-8OP" collectionClass="NSMutableArray" id="4Z8-rR-Mb5"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="140" y="133.5832083958021"/>
         </scene>
